@@ -6,10 +6,6 @@
 <title>AhadTube</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
   background: #0f0f0f;
@@ -18,11 +14,11 @@ body {
 }
 
 header {
+  padding: 15px;
+  background: #0f0f0f;
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #0f0f0f;
-  padding: 14px;
 }
 
 .logo {
@@ -38,8 +34,8 @@ header {
 
 input {
   flex: 1;
-  padding: 12px 16px;
-  border-radius: 24px;
+  padding: 12px;
+  border-radius: 22px;
   border: 1px solid #444;
   background: #181818;
   color: white;
@@ -47,24 +43,12 @@ input {
 }
 
 button {
+  padding: 12px 16px;
   border: 0;
   border-radius: 22px;
-  padding: 10px 16px;
   background: #22c55e;
   color: white;
   font-weight: bold;
-}
-
-.categories {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 10px 14px;
-}
-
-.categories button {
-  background: #272727;
-  white-space: nowrap;
 }
 
 #status {
@@ -78,9 +62,8 @@ button {
 
 .thumbnail {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16/9;
   object-fit: cover;
-  background: #222;
 }
 
 .info {
@@ -90,19 +73,11 @@ button {
 .title {
   font-size: 17px;
   font-weight: bold;
-  line-height: 1.3;
 }
 
 .channel {
-  margin-top: 6px;
   color: #aaa;
-  font-size: 14px;
-}
-
-.views {
-  color: #777;
-  font-size: 13px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 a {
@@ -115,190 +90,146 @@ a {
 <body>
 
 <header>
-  <div class="logo">▶ AhadTube</div>
 
-  <div class="search">
-    <input
-      id="searchBox"
-      type="text"
-      placeholder="Search videos..."
-      onkeydown="if(event.key==='Enter') searchVideos()"
-    >
+<div class="logo">▶ AhadTube</div>
 
-    <button onclick="searchVideos()">Search</button>
-  </div>
-</header>
+<div class="search">
 
-<div class="categories">
-  <button onclick="loadTrending()">Trending</button>
-  <button onclick="searchTerm('music')">Music</button>
-  <button onclick="searchTerm('gaming')">Gaming</button>
-  <button onclick="searchTerm('news')">News</button>
-  <button onclick="searchTerm('technology')">Technology</button>
+<input
+id="searchBox"
+placeholder="Search YouTube..."
+onkeydown="if(event.key==='Enter') searchVideos()"
+>
+
+<button onclick="searchVideos()">Search</button>
+
 </div>
 
-<div id="status">Loading...</div>
+</header>
+
+<div id="status">
+Ready to search
+</div>
 
 <main id="videos"></main>
 
 <script>
 
-const API ="https://pipedapi.moomoo.me";;
+const API = "https://pipedapi.moomoo.me";
 
 async function searchVideos() {
 
-  const query =
-    document.getElementById("searchBox").value.trim();
+const query =
+document.getElementById("searchBox").value.trim();
 
-  if (!query) {
-    alert("Please enter something to search.");
-    return;
-  }
-
-  document.getElementById("status").innerText =
-    "Searching...";
-
-  document.getElementById("videos").innerHTML = "";
-
-  try {
-
-    const response = await fetch(
-      API + "/search?q=" +
-      encodeURIComponent(query) +
-      "&filter=videos"
-    );
-
-    if (!response.ok) {
-      throw new Error("API error");
-    }
-
-    const data = await response.json();
-
-    showVideos(data.items || []);
-
-  } catch (error) {
-
-    document.getElementById("status").innerText =
-      "Search failed. The API server may be unavailable.";
-
-    console.error(error);
-  }
+if (!query) {
+alert("Please enter a search.");
+return;
 }
 
-function searchTerm(term) {
+document.getElementById("status").innerText =
+"Searching...";
 
-  document.getElementById("searchBox").value = term;
+document.getElementById("videos").innerHTML = "";
 
-  searchVideos();
+try {
+
+const response = await fetch(
+API + "/search?q=" +
+encodeURIComponent(query) +
+"&filter=videos"
+);
+
+if (!response.ok) {
+throw new Error("API error");
 }
 
-async function loadTrending() {
+const data = await response.json();
 
-  document.getElementById("status").innerText =
-    "Loading trending videos...";
+showVideos(data.items || []);
 
-  document.getElementById("videos").innerHTML = "";
+} catch (error) {
 
-  try {
+document.getElementById("status").innerText =
+"Search server unavailable.";
 
-    const response = await fetch(
-      API + "/trending?region=BD"
-    );
+console.log(error);
 
-    if (!response.ok) {
-      throw new Error("API error");
-    }
+}
 
-    const data = await response.json();
-
-    showVideos(data);
-
-  } catch (error) {
-
-    document.getElementById("status").innerText =
-      "Trending videos could not be loaded.";
-
-    console.error(error);
-  }
 }
 
 function showVideos(items) {
 
-  const container =
-    document.getElementById("videos");
+const container =
+document.getElementById("videos");
 
-  container.innerHTML = "";
+if (!items.length) {
 
-  if (!items.length) {
+document.getElementById("status").innerText =
+"No videos found.";
 
-    document.getElementById("status").innerText =
-      "No videos found.";
+return;
 
-    return;
-  }
+}
 
-  document.getElementById("status").innerText =
-    items.length + " videos found";
+document.getElementById("status").innerText =
+items.length + " results";
 
-  items.forEach(video => {
+items.forEach(video => {
 
-    const videoId =
-      video.url
-        ? video.url.split("v=")[1]
-        : "";
+const videoId =
+video.url?.split("v=")[1] || "";
 
-    const div =
-      document.createElement("div");
+const div =
+document.createElement("div");
 
-    div.className = "video";
+div.className = "video";
 
-    div.innerHTML = `
+div.innerHTML = `
 
-      <a
-        href="https://www.youtube.com/watch?v=${videoId}"
-        target="_blank"
-      >
+<a
+href="https://www.youtube.com/watch?v=${videoId}"
+target="_blank"
+>
 
-        <img
-          class="thumbnail"
-          src="${video.thumbnail || ""}"
-          loading="lazy"
-        >
+<img
+class="thumbnail"
+src="${video.thumbnail || ""}"
+>
 
-        <div class="info">
+<div class="info">
 
-          <div class="title">
-            ${escapeHtml(video.title || "Untitled")}
-          </div>
+<div class="title">
+${escapeHtml(video.title || "")}
+</div>
 
-          <div class="channel">
-            ${escapeHtml(video.uploader || "")}
-          </div>
+<div class="channel">
+${escapeHtml(video.uploaderName || "")}
+</div>
 
-          <div class="views">
-            ${video.views || 0} views
-          </div>
+</div>
 
-        </div>
+</a>
 
-      </a>
-    `;
+`;
 
-    container.appendChild(div);
-  });
+container.appendChild(div);
+
+});
+
 }
 
 function escapeHtml(text) {
 
-  const div =
-    document.createElement("div");
+const div =
+document.createElement("div");
 
-  div.textContent = text;
+div.textContent = text;
 
-  return div.innerHTML;
+return div.innerHTML;
+
 }
-
-loadTrending();
 
 </script>
 
