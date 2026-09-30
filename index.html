@@ -1,0 +1,147 @@
+A<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AhadTube</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+    }
+
+    header {
+      padding: 15px;
+      position: sticky;
+      top: 0;
+      background: #0f0f0f;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .search {
+      display: flex;
+      gap: 8px;
+    }
+
+    input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 22px;
+      border: 1px solid #444;
+      background: #181818;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      border-radius: 22px;
+      padding: 0 18px;
+      background: #22c55e;
+      color: white;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 15px;
+    }
+
+    nav button {
+      white-space: nowrap;
+      background: #272727;
+      padding: 9px 16px;
+    }
+
+    .video {
+      margin-bottom: 22px;
+    }
+
+    .thumbnail {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+    }
+
+    .info {
+      padding: 8px 12px;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .channel {
+      color: #aaa;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">▶ AhadTube</div>
+
+  <div class="search">
+    <input id="searchBox" placeholder="Search YouTube...">
+    <button onclick="search()">Search</button>
+  </div>
+</header>
+
+<nav>
+  <button>Home</button>
+  <button>Trending</button>
+  <button>Music</button>
+  <button>Gaming</button>
+  <button>News</button>
+</nav>
+
+<main id="videos">
+
+  <div class="video">
+    <div class="thumbnail">▶️</div>
+    <div class="info">
+      <div class="title">Welcome to AhadTube</div>
+      <div class="channel">Your Telegram YouTube-style Mini App</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function search() {
+  const query = document.getElementById("searchBox").value;
+
+  if (!query) {
+    alert("Please enter a search");
+    return;
+  }
+
+  alert("Searching for: " + query);
+}
+</script>
+
+</body>
+</html>
