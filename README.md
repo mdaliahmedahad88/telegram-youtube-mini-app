@@ -143,7 +143,7 @@ a {
 
 <script>
 
-const API = "https://pipedapi.kavin.rocks";
+const API ="https://pipedapi.moomoo.me";;
 
 async function searchVideos() {
 
